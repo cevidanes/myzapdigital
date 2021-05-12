@@ -344,13 +344,13 @@ module.exports = class Sessions {
             if (session.state == "CONNECTED") {
                 await session.client.then(async client => {
                     console.log('#### send msg =', params);
-					var strNumber = params.number;
-					var flgGroup = strNumber.indexOf("-");
-					if (flgGroup == -1) {
-						return await client.sendText(params.number + '@c.us', params.text);
-					} else {
-						return await client.sendText(params.number + '@g.us', params.text);
-					}
+                    var strNumber = params.number;
+                    var flgGroup = strNumber.indexOf("-");
+                    if (flgGroup == -1) {
+                        return await client.sendText(params.number + '@c.us', params.text);
+                    } else {
+                        return await client.sendText(params.number + '@g.us', params.text);
+                    }
                 });
                 return { result: "success" }
             } else {
@@ -399,11 +399,11 @@ module.exports = class Sessions {
                     var filePath = path.join(folderName, fileName);
                     fs.writeFileSync(filePath, base64Data, 'base64');
                     console.log(filePath);
-					var flgGroup = number.indexOf("-");
-					var whatsCode = "@c.us";
-					if (flgGroup != -1) {
-						whatsCode="@g.us";
-					}					
+                    var flgGroup = number.indexOf("-");
+                    var whatsCode = "@c.us";
+                    if (flgGroup != -1) {
+                        whatsCode = "@g.us";
+                    }
                     return await client.sendFile(number + whatsCode, filePath, fileName, caption);
                 }); //client.then(
                 return { result: "success" };
@@ -588,7 +588,7 @@ module.exports = class Sessions {
             };
         }
     } //getAllChatsNewMsg
-//ANUNES 29042021
+    //ANUNES 29042021
     static async getAllChatsGroups(sessionName) {
         var session = Sessions.getSession(sessionName);
         if (session) {
@@ -611,111 +611,106 @@ module.exports = class Sessions {
                 message: "NOTFOUND"
             };
         }
-    } //getAllChatsGroups
+    }; //getAllChatsGroups
 
 
 
-app.get("/getAllChatsWithNewMessages", async (req, res, next) => {
-    var result = await Sessions.getAllChatsWithNewMessages(req.body.sessionName);
-    res.json(result);
-}); //getAllChatsWithNewMessages
-	
 	//ANUNES 30042021
     static async getAllChatsWithNewMessages(sessionName) {
-        var session = Sessions.getSession(sessionName);
-        if (session) {
-            if (session.state == "CONNECTED") {
-                var resultgetAllChatsWithNewMessages = await session.client.then(async (client) => {
-                    return await client.getAllChatsWithNewMessages();
-                });
-                return {
-                    result: resultgetAllChatsWithNewMessages
-                };
-            } else {
-                return {
-                    result: "error",
-                    message: session.state
-                };
-            }
+    var session = Sessions.getSession(sessionName);
+    if (session) {
+        if (session.state == "CONNECTED") {
+            var resultgetAllChatsWithNewMessages = await session.client.then(async (client) => {
+                return await client.getAllChatsWithNewMessages();
+            });
+            return {
+                result: resultgetAllChatsWithNewMessages
+            };
         } else {
             return {
                 result: "error",
-                message: "NOTFOUND"
+                message: session.state
             };
         }
-    } //getAllChatsWithNewMessages
+    } else {
+        return {
+            result: "error",
+            message: "NOTFOUND"
+        };
+    }
+} //getAllChatsWithNewMessages
 	
     static async getAllUnreadMessages(sessionName) {
-        var session = Sessions.getSession(sessionName);
-        if (session) {
-            if (session.state == "CONNECTED") {
-                var resultGetAllUnreadMessages = await session.client.then(async (client) => {
-                    return await client.getAllUnreadMessages();
-                });
-                return {
-                    result: resultGetAllUnreadMessages
-                };
-            } else {
-                return {
-                    result: "error",
-                    message: session.state
-                };
-            }
+    var session = Sessions.getSession(sessionName);
+    if (session) {
+        if (session.state == "CONNECTED") {
+            var resultGetAllUnreadMessages = await session.client.then(async (client) => {
+                return await client.getAllUnreadMessages();
+            });
+            return {
+                result: resultGetAllUnreadMessages
+            };
         } else {
             return {
                 result: "error",
-                message: "NOTFOUND"
+                message: session.state
             };
         }
-    } //getAllUnreadMessages
+    } else {
+        return {
+            result: "error",
+            message: "NOTFOUND"
+        };
+    }
+} //getAllUnreadMessages
 
     static async checkNumberStatus(sessionName, number) {
-        var session = Sessions.getSession(sessionName);
-        //console.log(sessionName+number);
-        if (session) {
-            if (session.state == "CONNECTED") {
-                var resultcheckNumberStatus = await session.client.then(async (client) => {
-                    return await client.checkNumberStatus(number + '@c.us');
-                });
-                return {
-                    result: resultcheckNumberStatus
-                };
-            } else {
-                return {
-                    result: "error",
-                    message: session.state
-                };
-            }
+    var session = Sessions.getSession(sessionName);
+    //console.log(sessionName+number);
+    if (session) {
+        if (session.state == "CONNECTED") {
+            var resultcheckNumberStatus = await session.client.then(async (client) => {
+                return await client.checkNumberStatus(number + '@c.us');
+            });
+            return {
+                result: resultcheckNumberStatus
+            };
         } else {
             return {
                 result: "error",
-                message: "NOTFOUND"
+                message: session.state
             };
         }
-    } //saber se o número é válido
+    } else {
+        return {
+            result: "error",
+            message: "NOTFOUND"
+        };
+    }
+} //saber se o número é válido
 
     static async getNumberProfile(sessionName, number) {
-        var session = Sessions.getSession(sessionName);
-        //console.log(sessionName+number);
-        if (session) {
-            if (session.state == "CONNECTED") {
-                var resultgetNumberProfile = await session.client.then(async (client) => {
-                    return await client.getNumberProfile(number + '@c.us');
-                });
-                return {
-                    result: resultgetNumberProfile
-                };
-            } else {
-                return {
-                    result: "error",
-                    message: session.state
-                };
-            }
+    var session = Sessions.getSession(sessionName);
+    //console.log(sessionName+number);
+    if (session) {
+        if (session.state == "CONNECTED") {
+            var resultgetNumberProfile = await session.client.then(async (client) => {
+                return await client.getNumberProfile(number + '@c.us');
+            });
+            return {
+                result: resultgetNumberProfile
+            };
         } else {
             return {
                 result: "error",
-                message: "NOTFOUND"
+                message: session.state
             };
         }
-    } //receber o perfil do usuário
+    } else {
+        return {
+            result: "error",
+            message: "NOTFOUND"
+        };
+    }
+} //receber o perfil do usuário
 }
